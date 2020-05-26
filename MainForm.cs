@@ -11,19 +11,22 @@ using System.Windows.Forms;
 
 namespace Mesh
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         static int ID = 1;
         int selectedNodeID = -1;
         private Graphics drawer, panelDrawer;
-        private Pen[] pens = new Pen[] { new Pen(Color.Blue, 3), new Pen(Color.DeepPink, 3), new Pen(Color.Green, 3), new Pen(Color.Black), new Pen(Color.DarkOrange, 3) };
-        private int nodesSize = 50;
+        private Dictionary<string, Color> colors = new Dictionary<string, Color>() { { "Node", Color.Blue }, { "Target", Color.DeepPink }, { "Source", Color.DarkOrange }, { "Selected", Color.Green }, { "Radius", Color.Black } };
         private Bitmap picture;
         private bool mouseIsDown = false;
         private bool draggingRadius = false;
         private int dragAccuracy = 25;
 
         public List<Node> Nodes { get; set; } = new List<Node>();
+
+        public int NodesSize { get; set; } = 50;
+
+        public Dictionary<string, Color> Colors { get => colors; set { colors = value; UpdateMesh(); } }
 
         public int SelectedNodeID
         {
@@ -38,7 +41,9 @@ namespace Mesh
             }
         }
 
-        public Form1()
+        public int LinesThicknessIndex { get; set; } = 1;
+
+        public MainForm()
         {
             InitializeComponent();
             picture = new Bitmap(workPanel.Width, workPanel.Height);
@@ -54,7 +59,7 @@ namespace Mesh
             UpdateMesh();
         }
 
-        private void UpdateMesh()
+        public void UpdateMesh()
         {
             drawer.Clear(Color.Empty);
 
@@ -63,16 +68,16 @@ namespace Mesh
                 if (node.ID != SelectedNodeID)
                 {
                     if (node.Type == "Node")
-                        drawer.DrawEllipse(pens[0], new Rectangle(node.Position.X - nodesSize / 2, node.Position.Y - nodesSize / 2, nodesSize, nodesSize));
+                        drawer.DrawEllipse(new Pen(Colors["Node"], 3 * LinesThicknessIndex), new Rectangle(node.Position.X - NodesSize / 2, node.Position.Y - NodesSize / 2, NodesSize, NodesSize));
                     else if (node.Type == "Source")
-                        drawer.DrawEllipse(pens[4], new Rectangle(node.Position.X - nodesSize / 2, node.Position.Y - nodesSize / 2, nodesSize, nodesSize));
+                        drawer.DrawEllipse(new Pen(Colors["Source"], 3 * LinesThicknessIndex), new Rectangle(node.Position.X - NodesSize / 2, node.Position.Y - NodesSize / 2, NodesSize, NodesSize));
                     else
-                        drawer.DrawEllipse(pens[1], new Rectangle(node.Position.X - nodesSize / 2, node.Position.Y - nodesSize / 2, nodesSize, nodesSize));
+                        drawer.DrawEllipse(new Pen(Colors["Target"], 3 * LinesThicknessIndex), new Rectangle(node.Position.X - NodesSize / 2, node.Position.Y - NodesSize / 2, NodesSize, NodesSize));
                 }
                 else
                 {
-                    drawer.DrawEllipse(pens[2], new Rectangle(node.Position.X - nodesSize / 2, node.Position.Y - nodesSize / 2, nodesSize, nodesSize));
-                    drawer.DrawEllipse(pens[3], new Rectangle(node.Position.X - node.Radius, node.Position.Y - node.Radius, node.Radius * 2, node.Radius * 2));
+                    drawer.DrawEllipse(new Pen(Colors["Selected"], 3 * LinesThicknessIndex), new Rectangle(node.Position.X - NodesSize / 2, node.Position.Y - NodesSize / 2, NodesSize, NodesSize));
+                    drawer.DrawEllipse(new Pen(Colors["Radius"], 1 * LinesThicknessIndex), new Rectangle(node.Position.X - node.Radius, node.Position.Y - node.Radius, node.Radius * 2, node.Radius * 2));
                 }
             }
             workPanel.Invalidate();
@@ -131,7 +136,7 @@ namespace Mesh
             {
                 double distanceToMouse = Math.Sqrt(Math.Pow(e.X - Nodes[i].Position.X, 2) + Math.Pow(e.Y - Nodes[i].Position.Y, 2));
 
-                if (distanceToMouse <= nodesSize / 2)
+                if (distanceToMouse <= NodesSize / 2)
                 {
                     Cursor.Current = Cursors.SizeAll;
                 }
@@ -157,7 +162,7 @@ namespace Mesh
                 double distanceToMouse = Math.Sqrt(Math.Pow(e.X - nod.Position.X, 2) + Math.Pow(e.Y - nod.Position.Y, 2));
                 if (draggingRadius)
                 {
-                    if (distanceToMouse >= nodesSize / 2)
+                    if (distanceToMouse >= NodesSize / 2)
                         Nodes.Find(Node => Node.ID == SelectedNodeID).Radius = Convert.ToInt32(distanceToMouse);
                 }
                 else
@@ -260,6 +265,12 @@ namespace Mesh
                 ID = Convert.ToInt32(input[0]);
             }
             UpdateMesh();
+        }
+
+        private void nodesEditButton_Click(object sender, EventArgs e)
+        {
+            NodesEditForm nodesEditForm = new NodesEditForm(this);
+            nodesEditForm.ShowDialog();
         }
 
         private void workPanel_Paint(object sender, PaintEventArgs e)

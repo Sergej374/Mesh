@@ -1,6 +1,6 @@
 ﻿namespace Mesh
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,6 +38,9 @@
             this.nodeTypeButton = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceTypeButton = new System.Windows.Forms.ToolStripMenuItem();
             this.targetTypeButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.editButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.nodesEditButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.interfaceEditButton = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.selectedIDLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.workPanel = new System.Windows.Forms.Panel();
@@ -50,7 +53,8 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1,
             this.toolStripSeparator1,
-            this.typeChooseButton});
+            this.typeChooseButton,
+            this.editButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(617, 25);
@@ -72,14 +76,14 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -123,6 +127,31 @@
             this.targetTypeButton.Text = "Target";
             this.targetTypeButton.Click += new System.EventHandler(this.targetTypeButton_Click);
             // 
+            // editButton
+            // 
+            this.editButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.editButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nodesEditButton,
+            this.interfaceEditButton});
+            this.editButton.Image = ((System.Drawing.Image)(resources.GetObject("editButton.Image")));
+            this.editButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(40, 22);
+            this.editButton.Text = "Edit";
+            // 
+            // nodesEditButton
+            // 
+            this.nodesEditButton.Name = "nodesEditButton";
+            this.nodesEditButton.Size = new System.Drawing.Size(180, 22);
+            this.nodesEditButton.Text = "Nodes";
+            this.nodesEditButton.Click += new System.EventHandler(this.nodesEditButton_Click);
+            // 
+            // interfaceEditButton
+            // 
+            this.interfaceEditButton.Name = "interfaceEditButton";
+            this.interfaceEditButton.Size = new System.Drawing.Size(180, 22);
+            this.interfaceEditButton.Text = "Interface";
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -152,7 +181,7 @@
             this.workPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.workPanel_MouseMove);
             this.workPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.workPanel_MouseUp);
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -160,7 +189,7 @@
             this.Controls.Add(this.workPanel);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mesh-network";
             this.toolStrip1.ResumeLayout(false);
@@ -186,6 +215,9 @@
         private System.Windows.Forms.ToolStripMenuItem nodeTypeButton;
         private System.Windows.Forms.ToolStripMenuItem sourceTypeButton;
         private System.Windows.Forms.ToolStripMenuItem targetTypeButton;
+        private System.Windows.Forms.ToolStripDropDownButton editButton;
+        private System.Windows.Forms.ToolStripMenuItem nodesEditButton;
+        private System.Windows.Forms.ToolStripMenuItem interfaceEditButton;
     }
 }
 
