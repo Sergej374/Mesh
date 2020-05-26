@@ -16,7 +16,6 @@ namespace Mesh
         static int ID = 1;
         int selectedNodeID = -1;
         private Graphics drawer, panelDrawer;
-        private Dictionary<string, Color> colors = new Dictionary<string, Color>() { { "Node", Color.Blue }, { "Target", Color.DeepPink }, { "Source", Color.DarkOrange }, { "Selected", Color.Green }, { "Radius", Color.Black } };
         private Bitmap picture;
         private bool mouseIsDown = false;
         private bool draggingRadius = false;
@@ -26,7 +25,10 @@ namespace Mesh
 
         public int NodesSize { get; set; } = 50;
 
-        public Dictionary<string, Color> Colors { get => colors; set { colors = value; UpdateMesh(); } }
+        public Dictionary<string, Color> Colors { get; set; } = new Dictionary<string, Color>()
+        { { "Node", Color.Blue }, { "Target", Color.DeepPink }, { "Source", Color.DarkOrange }, { "Selected", Color.Green }, { "Radius", Color.Black } };
+        public Dictionary<string, bool> NodesVisible { get; set; } = new Dictionary<string, bool>()
+        { { "Node", true }, { "Target", true }, { "Source", true }, { "Radius", true } };
 
         public int SelectedNodeID
         {
@@ -67,17 +69,18 @@ namespace Mesh
             {
                 if (node.ID != SelectedNodeID)
                 {
-                    if (node.Type == "Node")
+                    if (node.Type == "Node" && NodesVisible["Node"])
                         drawer.DrawEllipse(new Pen(Colors["Node"], 3 * LinesThicknessIndex), new Rectangle(node.Position.X - NodesSize / 2, node.Position.Y - NodesSize / 2, NodesSize, NodesSize));
-                    else if (node.Type == "Source")
+                    else if (node.Type == "Source" && NodesVisible["Source"])
                         drawer.DrawEllipse(new Pen(Colors["Source"], 3 * LinesThicknessIndex), new Rectangle(node.Position.X - NodesSize / 2, node.Position.Y - NodesSize / 2, NodesSize, NodesSize));
-                    else
+                    else if (node.Type == "Target" && NodesVisible["Target"])
                         drawer.DrawEllipse(new Pen(Colors["Target"], 3 * LinesThicknessIndex), new Rectangle(node.Position.X - NodesSize / 2, node.Position.Y - NodesSize / 2, NodesSize, NodesSize));
                 }
                 else
                 {
                     drawer.DrawEllipse(new Pen(Colors["Selected"], 3 * LinesThicknessIndex), new Rectangle(node.Position.X - NodesSize / 2, node.Position.Y - NodesSize / 2, NodesSize, NodesSize));
-                    drawer.DrawEllipse(new Pen(Colors["Radius"], 1 * LinesThicknessIndex), new Rectangle(node.Position.X - node.Radius, node.Position.Y - node.Radius, node.Radius * 2, node.Radius * 2));
+                    if (NodesVisible["Radius"])
+                        drawer.DrawEllipse(new Pen(Colors["Radius"], 1 * LinesThicknessIndex), new Rectangle(node.Position.X - node.Radius, node.Position.Y - node.Radius, node.Radius * 2, node.Radius * 2));
                 }
             }
             workPanel.Invalidate();
@@ -88,22 +91,27 @@ namespace Mesh
             mouseIsDown = true;
             for (int i = 0; i < Nodes.Count; i++)
             {
-                double distanceToMouse = Math.Sqrt(Math.Pow(e.X - Nodes[i].Position.X, 2) + Math.Pow(e.Y - Nodes[i].Position.Y, 2));
-                if (distanceToMouse <= dragAccuracy)
+                if (NodesVisible[Nodes[i].Type])
                 {
-                    SelectedNodeID = Nodes[i].ID;
-                    selectedIDLabel.Text = "ID: " + SelectedNodeID;
-                    typeChooseButton.Text = Nodes.Find(Node => Node.ID == selectedNodeID).Type;
-                    typeChooseButton.Enabled = true;
-                    UpdateMesh();
-                    return;
-                }
-                else if (Math.Abs(distanceToMouse - Nodes[i].Radius) < 2)
-                {
-                    draggingRadius = true;
-                    Nodes[i].Radius = Convert.ToInt32(distanceToMouse);
-                    UpdateMesh();
-                    return;
+                    double distanceToMouse = Math.Sqrt(Math.Pow(e.X - Nodes[i].Position.X, 2) + Math.Pow(e.Y - Nodes[i].Position.Y, 2));
+                    if (distanceToMouse <= dragAccuracy)
+                    {
+                        SelectedNodeID = Nodes[i].ID;
+                        selectedIDLabel.Text = "ID: " + SelectedNodeID;
+                        selectedTypeLabel.Text = "Type: " +  Nodes[i].Type;
+                        selectedRadiusLabel.Text = "Radius: " + Nodes[i].Radius;
+                        typeChooseButton.Text = Nodes.Find(Node => Node.ID == selectedNodeID).Type;
+                        typeChooseButton.Enabled = true;
+                        UpdateMesh();
+                        return;
+                    }
+                    else if (Math.Abs(distanceToMouse - Nodes[i].Radius) < 2)
+                    {
+                        draggingRadius = true;
+                        Nodes[i].Radius = Convert.ToInt32(distanceToMouse);
+                        UpdateMesh();
+                        return;
+                    }
                 }
             }
 
@@ -117,7 +125,7 @@ namespace Mesh
             }
 
             Point mousePos = e.Location;
-            if (SelectedNodeID == -1)
+            if (SelectedNodeID == -1 && NodesVisible["Node"])
                 AddNode(mousePos, 100, "Node");
 
             workPanel.Invalidate();
@@ -163,7 +171,10 @@ namespace Mesh
                 if (draggingRadius)
                 {
                     if (distanceToMouse >= NodesSize / 2)
+                    {
                         Nodes.Find(Node => Node.ID == SelectedNodeID).Radius = Convert.ToInt32(distanceToMouse);
+                        selectedRadiusLabel.Text = "Radius: " + Convert.ToInt32(distanceToMouse);
+                    }
                 }
                 else
                 {
@@ -190,6 +201,7 @@ namespace Mesh
         {
             Nodes.Find(Node => Node.ID == selectedNodeID).Type = "Node";
             typeChooseButton.Text = "Node";
+            selectedTypeLabel.Text = "Type: Node";
             UpdateMesh();
         }
 
@@ -197,6 +209,7 @@ namespace Mesh
         {
             Nodes.Find(Node => Node.ID == selectedNodeID).Type = "Source";
             typeChooseButton.Text = "Source";
+            selectedTypeLabel.Text = "Type: Source";
             UpdateMesh();
         }
 
@@ -204,6 +217,7 @@ namespace Mesh
         {
             Nodes.Find(Node => Node.ID == selectedNodeID).Type = "Target";
             typeChooseButton.Text = "Target";
+            selectedTypeLabel.Text = "Type: Target";
             UpdateMesh();
         }
 
@@ -271,6 +285,21 @@ namespace Mesh
         {
             NodesEditForm nodesEditForm = new NodesEditForm(this);
             nodesEditForm.ShowDialog();
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && selectedNodeID != -1)
+            {
+                Nodes.Remove(Nodes.Find(Node => Node.ID == selectedNodeID));
+                UpdateMesh();
+            }
+        }
+
+        private void interfaceEditButton_Click(object sender, EventArgs e)
+        {
+            InterfaceEditForm interfaceEditForm = new InterfaceEditForm(this);
+            interfaceEditForm.ShowDialog();
         }
 
         private void workPanel_Paint(object sender, PaintEventArgs e)

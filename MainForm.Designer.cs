@@ -33,28 +33,30 @@
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.nodesEditButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.interfaceEditButton = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.typeChooseButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.nodeTypeButton = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceTypeButton = new System.Windows.Forms.ToolStripMenuItem();
             this.targetTypeButton = new System.Windows.Forms.ToolStripMenuItem();
-            this.editButton = new System.Windows.Forms.ToolStripDropDownButton();
-            this.nodesEditButton = new System.Windows.Forms.ToolStripMenuItem();
-            this.interfaceEditButton = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.selectedIDLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.workPanel = new System.Windows.Forms.Panel();
+            this.selectedTypeLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.selectedRadiusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1,
+            this.editButton,
             this.toolStripSeparator1,
-            this.typeChooseButton,
-            this.editButton});
+            this.typeChooseButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(617, 25);
@@ -86,6 +88,32 @@
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // editButton
+            // 
+            this.editButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.editButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nodesEditButton,
+            this.interfaceEditButton});
+            this.editButton.Image = ((System.Drawing.Image)(resources.GetObject("editButton.Image")));
+            this.editButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(40, 22);
+            this.editButton.Text = "Edit";
+            // 
+            // nodesEditButton
+            // 
+            this.nodesEditButton.Name = "nodesEditButton";
+            this.nodesEditButton.Size = new System.Drawing.Size(180, 22);
+            this.nodesEditButton.Text = "Nodes";
+            this.nodesEditButton.Click += new System.EventHandler(this.nodesEditButton_Click);
+            // 
+            // interfaceEditButton
+            // 
+            this.interfaceEditButton.Name = "interfaceEditButton";
+            this.interfaceEditButton.Size = new System.Drawing.Size(180, 22);
+            this.interfaceEditButton.Text = "Interface";
+            this.interfaceEditButton.Click += new System.EventHandler(this.interfaceEditButton_Click);
             // 
             // toolStripSeparator1
             // 
@@ -127,40 +155,17 @@
             this.targetTypeButton.Text = "Target";
             this.targetTypeButton.Click += new System.EventHandler(this.targetTypeButton_Click);
             // 
-            // editButton
+            // statusStrip
             // 
-            this.editButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.editButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.nodesEditButton,
-            this.interfaceEditButton});
-            this.editButton.Image = ((System.Drawing.Image)(resources.GetObject("editButton.Image")));
-            this.editButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.editButton.Name = "editButton";
-            this.editButton.Size = new System.Drawing.Size(40, 22);
-            this.editButton.Text = "Edit";
-            // 
-            // nodesEditButton
-            // 
-            this.nodesEditButton.Name = "nodesEditButton";
-            this.nodesEditButton.Size = new System.Drawing.Size(180, 22);
-            this.nodesEditButton.Text = "Nodes";
-            this.nodesEditButton.Click += new System.EventHandler(this.nodesEditButton_Click);
-            // 
-            // interfaceEditButton
-            // 
-            this.interfaceEditButton.Name = "interfaceEditButton";
-            this.interfaceEditButton.Size = new System.Drawing.Size(180, 22);
-            this.interfaceEditButton.Text = "Interface";
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.selectedIDLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 381);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(617, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectedIDLabel,
+            this.selectedTypeLabel,
+            this.selectedRadiusLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 381);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(617, 22);
+            this.statusStrip.TabIndex = 2;
+            this.statusStrip.Text = "statusStrip";
             // 
             // selectedIDLabel
             // 
@@ -181,21 +186,32 @@
             this.workPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.workPanel_MouseMove);
             this.workPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.workPanel_MouseUp);
             // 
+            // selectedTypeLabel
+            // 
+            this.selectedTypeLabel.Name = "selectedTypeLabel";
+            this.selectedTypeLabel.Size = new System.Drawing.Size(0, 17);
+            // 
+            // selectedRadiusLabel
+            // 
+            this.selectedRadiusLabel.Name = "selectedRadiusLabel";
+            this.selectedRadiusLabel.Size = new System.Drawing.Size(0, 17);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(617, 403);
             this.Controls.Add(this.workPanel);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip1);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mesh-network";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -204,8 +220,8 @@
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel selectedIDLabel;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        public System.Windows.Forms.ToolStripStatusLabel selectedIDLabel;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
@@ -218,6 +234,8 @@
         private System.Windows.Forms.ToolStripDropDownButton editButton;
         private System.Windows.Forms.ToolStripMenuItem nodesEditButton;
         private System.Windows.Forms.ToolStripMenuItem interfaceEditButton;
+        public System.Windows.Forms.ToolStripStatusLabel selectedTypeLabel;
+        public System.Windows.Forms.ToolStripStatusLabel selectedRadiusLabel;
     }
 }
 
