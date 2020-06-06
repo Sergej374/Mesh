@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Mesh.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorisationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AuthorisationForm.Designer.cs">
+      <DependentUpon>AuthorisationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="InterfaceEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,6 +76,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaveInNewNetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SaveInNewNetForm.Designer.cs">
+      <DependentUpon>SaveInNewNetForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AuthorisationForm.resx">
+      <DependentUpon>AuthorisationForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InterfaceEditForm.resx">
       <DependentUpon>InterfaceEditForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -85,6 +103,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SaveInNewNetForm.resx">
+      <DependentUpon>SaveInNewNetForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

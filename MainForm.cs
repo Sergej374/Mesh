@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -13,6 +15,9 @@ namespace Mesh
 {
     public partial class MainForm : Form
     {
+        public string newNet;
+        Timer pingerTimer = new Timer();
+        Timer readerTimer = new Timer();
         static int ID = 1;
         int selectedNodeID = -1;
         private Graphics drawer, panelDrawer;
@@ -51,6 +56,48 @@ namespace Mesh
             picture = new Bitmap(workPanel.Width, workPanel.Height);
             drawer = Graphics.FromImage(picture);
             panelDrawer = workPanel.CreateGraphics();
+            pingerTimer.Interval = 15000;
+            pingerTimer.Tick += PingerTimer_Tick;
+            pingerTimer.Start();
+            readerTimer.Tick += ReaderTimer_Tick;
+            readerTimer.Start();
+        }
+
+        private void ReaderTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (string reply in AuthorisationForm.ServerResponces)
+                {
+                    switch (reply)
+                    {
+                        case "net-end":
+                            string nets = "";
+                            for (int i = AuthorisationForm.ServerResponces.IndexOf("net-begin") + 1; i < AuthorisationForm.ServerResponces.IndexOf("net-end"); i++)
+                            {
+                                nets += AuthorisationForm.ServerResponces[i] + "\n";
+                            }
+                            AuthorisationForm.ServerResponces.RemoveAll(str => AuthorisationForm.ServerResponces.IndexOf(str) > AuthorisationForm.ServerResponces.IndexOf("net-begin") &&
+                            AuthorisationForm.ServerResponces.IndexOf(str) < AuthorisationForm.ServerResponces.IndexOf("net-end"));
+                            AuthorisationForm.ServerResponces.RemoveAll(str => str == "net-end" || str == "net-begin");
+                            MessageBox.Show(nets);
+                            break;
+                        case "pong":
+                            Debug.WriteLine("Received: " + reply);
+                            AuthorisationForm.ServerResponces.Remove(reply);
+                            break;
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void PingerTimer_Tick(object sender, EventArgs e)
+        {
+            AuthorisationForm.SendCommand("ping");
         }
 
         private void AddNode(Point pos, int rad, string typ)
@@ -98,7 +145,7 @@ namespace Mesh
                     {
                         SelectedNodeID = Nodes[i].ID;
                         selectedIDLabel.Text = "ID: " + SelectedNodeID;
-                        selectedTypeLabel.Text = "Type: " +  Nodes[i].Type;
+                        selectedTypeLabel.Text = "Type: " + Nodes[i].Type;
                         selectedRadiusLabel.Text = "Radius: " + Nodes[i].Radius;
                         typeChooseButton.Text = Nodes.Find(Node => Node.ID == selectedNodeID).Type;
                         typeChooseButton.Enabled = true;
@@ -154,7 +201,6 @@ namespace Mesh
                 }
             }
 
-
             if (mouseIsDown && SelectedNodeID != -1)
             {
                 if (Cursor.Position.X < Left)
@@ -180,11 +226,8 @@ namespace Mesh
                 {
                     Nodes.Find(Node => Node.ID == SelectedNodeID).Position = e.Location;
                 }
-
                 UpdateMesh();
             }
-
-
         }
 
         private void workPanel_SizeChanged(object sender, EventArgs e)
@@ -301,6 +344,46 @@ namespace Mesh
             InterfaceEditForm interfaceEditForm = new InterfaceEditForm(this);
             interfaceEditForm.ShowDialog();
         }
+
+        private void netsListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AuthorisationForm.SendCommand("list-nets");
+        }
+
+        private void saveOnServerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (MessageBox.Show("Create a new net?", "Where to save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+            {
+                case DialogResult.Yes:
+                    SaveInNewNetForm saveInNewNetForm = new SaveInNewNetForm(this);
+                    saveInNewNetForm.ShowDialog();
+                    while (true)
+                    {
+                        if (AuthorisationForm.ServerResponces.Count > 0)
+                        {
+                            string lastReply = AuthorisationForm.ServerResponces[AuthorisationForm.ServerResponces.Count - 1];
+                            if (Regex.IsMatch(lastReply, @"^create-net-ok*"))
+                            {
+                                foreach (Node node in Nodes)
+                                {
+                                    AuthorisationForm.SendCommand("add-node " + newNet + " " + node.Position.X + " " + node.Position.Y + " " + node.Radius + " " + node.ID);
+                                }
+                                break;
+                            }
+                            else if (Regex.IsMatch(lastReply, @"^create-net-fail*"))
+                            {
+                                MessageBox.Show("Error");
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case DialogResult.No:
+                    break;
+            }
+
+        }
+
 
         private void workPanel_Paint(object sender, PaintEventArgs e)
         {

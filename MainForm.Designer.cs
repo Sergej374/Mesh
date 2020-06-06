@@ -43,9 +43,11 @@
             this.targetTypeButton = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.selectedIDLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.workPanel = new System.Windows.Forms.Panel();
             this.selectedTypeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.selectedRadiusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.workPanel = new System.Windows.Forms.Panel();
+            this.netsListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveOnServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -68,7 +70,9 @@
             this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
-            this.saveToolStripMenuItem});
+            this.saveToolStripMenuItem,
+            this.netsListToolStripMenuItem,
+            this.saveOnServerToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -78,14 +82,14 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -104,14 +108,14 @@
             // nodesEditButton
             // 
             this.nodesEditButton.Name = "nodesEditButton";
-            this.nodesEditButton.Size = new System.Drawing.Size(180, 22);
+            this.nodesEditButton.Size = new System.Drawing.Size(120, 22);
             this.nodesEditButton.Text = "Nodes";
             this.nodesEditButton.Click += new System.EventHandler(this.nodesEditButton_Click);
             // 
             // interfaceEditButton
             // 
             this.interfaceEditButton.Name = "interfaceEditButton";
-            this.interfaceEditButton.Size = new System.Drawing.Size(180, 22);
+            this.interfaceEditButton.Size = new System.Drawing.Size(120, 22);
             this.interfaceEditButton.Text = "Interface";
             this.interfaceEditButton.Click += new System.EventHandler(this.interfaceEditButton_Click);
             // 
@@ -172,6 +176,16 @@
             this.selectedIDLabel.Name = "selectedIDLabel";
             this.selectedIDLabel.Size = new System.Drawing.Size(0, 17);
             // 
+            // selectedTypeLabel
+            // 
+            this.selectedTypeLabel.Name = "selectedTypeLabel";
+            this.selectedTypeLabel.Size = new System.Drawing.Size(0, 17);
+            // 
+            // selectedRadiusLabel
+            // 
+            this.selectedRadiusLabel.Name = "selectedRadiusLabel";
+            this.selectedRadiusLabel.Size = new System.Drawing.Size(0, 17);
+            // 
             // workPanel
             // 
             this.workPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -186,15 +200,19 @@
             this.workPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.workPanel_MouseMove);
             this.workPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.workPanel_MouseUp);
             // 
-            // selectedTypeLabel
+            // netsListToolStripMenuItem
             // 
-            this.selectedTypeLabel.Name = "selectedTypeLabel";
-            this.selectedTypeLabel.Size = new System.Drawing.Size(0, 17);
+            this.netsListToolStripMenuItem.Name = "netsListToolStripMenuItem";
+            this.netsListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.netsListToolStripMenuItem.Text = "Nets list";
+            this.netsListToolStripMenuItem.Click += new System.EventHandler(this.netsListToolStripMenuItem_Click);
             // 
-            // selectedRadiusLabel
+            // saveOnServerToolStripMenuItem
             // 
-            this.selectedRadiusLabel.Name = "selectedRadiusLabel";
-            this.selectedRadiusLabel.Size = new System.Drawing.Size(0, 17);
+            this.saveOnServerToolStripMenuItem.Name = "saveOnServerToolStripMenuItem";
+            this.saveOnServerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveOnServerToolStripMenuItem.Text = "Save on server";
+            this.saveOnServerToolStripMenuItem.Click += new System.EventHandler(this.saveOnServerToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -236,6 +254,8 @@
         private System.Windows.Forms.ToolStripMenuItem interfaceEditButton;
         public System.Windows.Forms.ToolStripStatusLabel selectedTypeLabel;
         public System.Windows.Forms.ToolStripStatusLabel selectedRadiusLabel;
+        private System.Windows.Forms.ToolStripMenuItem netsListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveOnServerToolStripMenuItem;
     }
 }
 
